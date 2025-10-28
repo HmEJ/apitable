@@ -288,6 +288,26 @@ _check_env: ## check if .env files exists
 run: _check_env ## run local code to development environemnt with docker env
 	make run-local
 
+run1: _check_env
+	echo 1 | make run-local
+
+run2: _check_env
+	echo 2 | make run-local
+
+run3: _check_env
+	echo 3 | make run-local
+
+run4: _check_env
+	echo 4 | make run-local
+
+.PHONY: quick-web
+quick-web:
+	@echo "\033[1;36m🚀 Fast starting web...\033[0m"
+	@cd packages/datasheet && \
+	export NODE_ENV=development && \
+	export NEXT_TELEMETRY_DISABLED=1 && \
+	pnpm dev
+
 .PHONY: run-local
 run-local: ## run services with local programming language envinroment
 	@echo "$$RUN_LOCAL_TXT"

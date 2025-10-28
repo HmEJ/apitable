@@ -133,7 +133,7 @@ export class ResourceService implements IResourceService {
     this.socket && this.socket.removeAllListeners();
     this.socket && this.socket.close();
     this.unBindBeforeUnload();
-    this.store.dispatch(StoreActions.setConnected(false));
+    // this.store.dispatch(StoreActions.setConnected(false));
     this.resourceStashManager.destroy();
   }
 
@@ -315,14 +315,14 @@ export class ResourceService implements IResourceService {
       // Player.doTrigger(Events.app_error_logger, { error: new Error('socket disconnect reason: ' + reason) });
 
       this.store.dispatch(StoreActions.setReconnecting(true));
-      this.roomService.setConnected(false);
+      // this.roomService.setConnected(false);
       let count = 1;
 
       const interval = window.setInterval(async () => {
         if (socket.connected) {
           clearInterval(interval);
           await this.roomService.watch();
-          this.roomService.setConnected(true);
+          // this.roomService.setConnected(true);
           this.store.dispatch(StoreActions.setReconnecting(false));
           console.log('connected');
           return;
@@ -337,7 +337,7 @@ export class ResourceService implements IResourceService {
 
     socket.on('connect', () => {
       this.reportSocketError = true;
-      this.store.dispatch(StoreActions.setConnected(true));
+      // this.store.dispatch(StoreActions.setConnected(true));
     });
 
     socket.on('connect_error', () => {
