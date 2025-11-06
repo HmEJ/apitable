@@ -238,5 +238,9 @@ export const getEnvVars = () => {
     HIDDEN_SEE_MORE_MEMBER_LIST: process.env.HIDDEN_SEE_MORE_MEMBER_LIST === 'true',
     ALLOW_EMBED_SEND_REMIND: process.env.ALLOW_EMBED_SEND_REMIND === 'true',
     NEXT_PUBLIC_UNIT_SEARCH_TYPE: process.env.NEXT_PUBLIC_UNIT_SEARCH_TYPE,
+    // offline/brand controls for intranet build
+    OFFLINE_MODE: process.env.OFFLINE_MODE === 'true',
+    BRAND_NAME: process.env.BRAND_NAME,
+    BRAND_SHORT: process.env.BRAND_SHORT,
   };
 };

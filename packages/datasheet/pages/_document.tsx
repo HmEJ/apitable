@@ -51,13 +51,13 @@ class MyDocument extends Document<IClientInfo> {
           {/* Do not send referrer in development mode to solve the problem of CDN Anti-Leech chain images not displaying. */}
           {process.env.NODE_ENV === 'development' && <meta name="referrer" content="no-referrer" />}
           <link rel="manifest" href={'/file/manifest.json'} />
-          {JSON.parse(envVars).EMBED_BAIDU_CATCH_SDK && (
+          {JSON.parse(envVars).EMBED_BAIDU_CATCH_SDK && !JSON.parse(envVars).OFFLINE_MODE && (
             <script src="https://rte-fe-static.bj.bcebos.com/rte-online/rte-fe-static/MultiSheetMonitor/index.js" />
           )}
           <script src="/file/js/browser_check.2.js" async />
           {/* injection of custom configs of editions, e.g. APITable */}
           <script src={`/custom/custom_config.js?version=${version}`} defer />
-          {JSON.parse(envVars).COOKIEBOT_ID && (
+          {JSON.parse(envVars).COOKIEBOT_ID && !JSON.parse(envVars).OFFLINE_MODE && (
             <script
               id="Cookiebot"
               src="https://consent.cookiebot.com/uc.js"
@@ -70,7 +70,7 @@ class MyDocument extends Document<IClientInfo> {
         <body>
           <Main />
           <NextScript />
-          {!JSON.parse(envVars).IS_SELFHOST && <Script src="https://g.alicdn.com/AWSC/AWSC/awsc.js" strategy={'beforeInteractive'} />}
+          {!JSON.parse(envVars).IS_SELFHOST && !JSON.parse(envVars).OFFLINE_MODE && <Script src="https://g.alicdn.com/AWSC/AWSC/awsc.js" strategy={'beforeInteractive'} />}
           {
             <Script id="__initialization_data__" strategy={'beforeInteractive'}>
               {`

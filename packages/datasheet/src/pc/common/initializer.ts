@@ -39,6 +39,10 @@ if (!process.env.SSR && window !== undefined) {
 
 function initBugTracker() {
   const dsn = getEnvVariables().SENTRY_DSN;
+  // Disable Sentry entirely in offline mode
+  if (getEnvVariables().OFFLINE_MODE) {
+    return;
+  }
   // Reporting is not enabled for local development and private deployments
   if (!dsn) {
     return;
@@ -104,4 +108,3 @@ export function initializer(comlink: any) {
 
   initBugTracker();
 }
-

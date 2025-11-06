@@ -24,6 +24,7 @@ import { Events, IReduxState, Player, TrackEvents } from '@apitable/core';
 import { SideWrapper } from 'pc/components/route_manager/side_wrapper';
 import { usePageParams, useQuery, useRequest, useUserRequest } from 'pc/hooks';
 import { useAppSelector } from 'pc/store/react-redux';
+import { getEnvVariables } from 'pc/utils/env';
 import { ComponentDisplay, ScreenSize } from '../common/component_display';
 import { MobileSideBar } from '../mobile_side_bar';
 // @ts-ignore
@@ -46,8 +47,10 @@ const TemplateCentre: FC<React.PropsWithChildren<unknown>> = (props) => {
     if (!spaceId) {
       getLoginStatus();
     }
-    Player.doTrigger(Events.template_center_shown);
-    posthog?.capture(TrackEvents.TemplatePageView);
+    if (!getEnvVariables().OFFLINE_MODE) {
+      Player.doTrigger(Events.template_center_shown);
+      posthog?.capture(TrackEvents.TemplatePageView);
+    }
   });
 
   if (loading) {

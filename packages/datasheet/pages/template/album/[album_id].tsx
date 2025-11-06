@@ -16,20 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import dynamic from 'next/dynamic';
-import React from 'react';
+export function getServerSideProps() {
+  return { notFound: true } as any;
+}
 
-const TemplateCentreWithNoSSR = dynamic(() => import('pc/components/template_centre/template_centre'), { ssr: false });
-const AlbumDetailWithNoSSR = dynamic(() => import('pc/components/template_centre/album/album'), { ssr: false });
-
-const App = () => {
-  return (
-    <>
-      <TemplateCentreWithNoSSR>
-        <AlbumDetailWithNoSSR />
-      </TemplateCentreWithNoSSR>
-    </>
-  );
-};
-
-export default App;
+export default function App() { return null; }

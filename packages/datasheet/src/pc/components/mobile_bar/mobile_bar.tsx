@@ -37,7 +37,7 @@ export const MobileBar: React.FC<React.PropsWithChildren<{ title?: string }>> = 
 
   const matchedWorkSpace = datasheetId && currentView;
 
-  const matchedTemplateCentre = pathname.includes('/template');
+  const matchedTemplateCentre = false;
 
   return (
     <div className={styles.shareMobileBar}>

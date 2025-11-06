@@ -34,7 +34,7 @@ export const MobileSideBar: React.FC<React.PropsWithChildren<unknown>> = () => {
   const router = useRouter();
   const pathname = router.asPath;
 
-  const matchedTemplateCentre = pathname.includes('/template');
+  const matchedTemplateCentre = false;
 
   const query = useQuery();
 
@@ -44,7 +44,7 @@ export const MobileSideBar: React.FC<React.PropsWithChildren<unknown>> = () => {
   // DASHBOARD = 'dsb',
   // MIRROR = 'mir',
 
-  const matchedNode = RegExp('/[fod|dst|fom|dsb|mir]').test(pathname);
+  const matchedNode = /\/(fod|dst|fom|dsb|mir)/.test(pathname);
 
   /**
    * When cutting space to keep the sidebar normal pop-up,

@@ -36,7 +36,7 @@ import {
   TrackEvents,
   WORKBENCH_SIDE_ID,
 } from '@apitable/core';
-import { AddOutlined, DeleteOutlined, FolderAddOutlined, ImportOutlined, PlanetOutlined, SearchOutlined, UserAddOutlined } from '@apitable/icons';
+import { AddOutlined, DeleteOutlined, FolderAddOutlined, ImportOutlined, SearchOutlined, UserAddOutlined } from '@apitable/icons';
 import { GenerateTemplate } from 'pc/components/catalog/generate_template';
 import { ImportFile } from 'pc/components/catalog/import_file';
 import { MoveTo } from 'pc/components/catalog/move_to';
@@ -278,15 +278,6 @@ export const WorkbenchSide: FC<React.PropsWithChildren<unknown>> = () => {
     Router.push(Navigation.TRASH, { params: { spaceId } });
   };
 
-  const jumpSpaceTemplate = () => {
-    Router.push(Navigation.TEMPLATE, {
-      params: {
-        spaceId,
-        categoryId: 'tpcprivate',
-      },
-    });
-  };
-
   const openDefaultMenu = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
     setRightClickInfo({
@@ -438,11 +429,6 @@ export const WorkbenchSide: FC<React.PropsWithChildren<unknown>> = () => {
               </div>
             </Tooltip>
           )}
-          <Tooltip title={t(Strings.workbench_side_space_template)}>
-            <div className={styles.groupItem} onClick={jumpSpaceTemplate} id={WORKBENCH_SIDE_ID.TO_SPACE_TEMPLATE}>
-              <PlanetOutlined color={colors.rc02} />
-            </div>
-          </Tooltip>
           {inviteStatus && !isIdassPrivateDeployment() && (
             <Tooltip title={t(Strings.invite_friends)}>
               <div

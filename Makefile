@@ -288,16 +288,16 @@ _check_env: ## check if .env files exists
 run: _check_env ## run local code to development environemnt with docker env
 	make run-local
 
-run1: _check_env
+runBackend: _check_env
 	echo 1 | make run-local
 
-run2: _check_env
+runRoomServer: _check_env
 	echo 2 | make run-local
 
-run3: _check_env
+runWebServer: _check_env
 	echo 3 | make run-local
 
-run4: _check_env
+runDataBus: _check_env
 	echo 4 | make run-local
 
 .PHONY: quick-web

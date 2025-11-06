@@ -19,7 +19,7 @@
 import { useToggle } from 'ahooks';
 import { Badge } from 'antd';
 import classNames from 'classnames';
-import { AnimationItem } from 'lottie-web/index';
+import { AnimationItem } from 'lottie-web';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -30,7 +30,6 @@ import { Events, IReduxState, NAV_ID, Player, Settings, StoreActions, Strings, t
 import {
   ChevronDownOutlined,
   NotificationOutlined,
-  PlanetOutlined,
   SearchOutlined,
   Setting2Outlined,
   UserGroupOutlined,
@@ -112,10 +111,9 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
     const list = env.SIDEBAR_CUSTOM_BUTTON_LIST;
     if (!list) {
       return [];
-    } 
+    }
     return JSON.parse(list);
-    
-  }, []);
+  }, [env.SIDEBAR_CUSTOM_BUTTON_LIST]);
   useRequest(notificationStatistics);
 
   useEffect(() => {
@@ -226,7 +224,8 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
     dispatch(StoreActions.getNewMsgFromWsAndLook(false));
     destroyLottie();
   }, [destroyLottie, dispatch, isMobile, toggleNotice]);
-  const navList = Player.applyFilters(Events.get_nav_list, [
+  // 基础导航项，通过插件过滤扩展
+  const navListRaw = Player.applyFilters(Events.get_nav_list, [
     {
       routeAddress: '/workbench' + search,
       icon: WorkbenchOutlined,
@@ -241,13 +240,7 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
       key: NavKey.Org,
       domId: NAV_ID.ICON_ADDRESS,
     },
-    {
-      routeAddress: '/template' + search,
-      icon: PlanetOutlined,
-      text: t(Strings.nav_templates),
-      key: NavKey.Template,
-      domId: NAV_ID.ICON_TEMPLATE,
-    },
+    // 模板入口已移除
     {
       routeAddress: '/management' + search,
       icon: Setting2Outlined,
@@ -256,6 +249,19 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
       domId: NAV_ID.ICON_SPACE_MANAGE,
     },
   ]);
+  const navList = (Array.isArray(navListRaw) ? navListRaw : []).filter((item: any) => {
+    if (!item || typeof item !== 'object') return false;
+    const key = item.key as string | undefined;
+    const addr = item.routeAddress as string | undefined;
+    return !(item as any).hide && key !== NavKey.Template && !(addr && addr.includes('/template'));
+  });
+
+  // 根据用户权限过滤，避免渲染时返回 null 带来“空位”
+  const visibleNavList = navList.filter((item: any) => {
+    if (user && !user.isAdmin && item.key === NavKey.SpaceManagement) return false;
+    if (user?.isDelSpace) return item.key === NavKey.SpaceManagement;
+    return true;
+  });
 
   const NotificationNav = React.useMemo((): React.ReactElement => {
     const dom = (
@@ -298,7 +304,9 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
     if (!isHiddenLivechat() || isMobile) {
       return;
     }
-    !!router.pathname.includes('workbench') && window.LiveChatWidget?.call('hide');
+    if (router.pathname.includes('workbench')) {
+      window.LiveChatWidget?.call('hide');
+    }
   }, [router.pathname, isMobile]);
 
   const onNoticeClose = () => {
@@ -306,7 +314,8 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
     setUnReadMsgCount(0);
   };
 
-  const templateActive = window.location.pathname.includes('template');
+  // 仅当导航中存在模板入口且当前在 template 路由下才激活模板态
+  const templateActive = false;
 
   const isDingTalkSpace = isSocialDingTalk?.(space);
   const isFeiShuSpace = isSocialFeiShu?.(space);
@@ -363,21 +372,13 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
           </div>
         </div>
         <div className={styles.navWrapper} onClick={hiddenUserMenu}>
-          {navList.map((item: any) => {
+          {visibleNavList.map((item: any) => {
             if (item.component) {
               return item.component();
             }
-            if (user && !user!.isAdmin && item.key === NavKey.SpaceManagement) {
-              return null;
-            }
-            if (user && user.isDelSpace && item.key !== NavKey.SpaceManagement) {
-              return null;
-            }
+            // 权限已在 visibleNavList 过滤
 
-            let NavIcon = item.icon;
-            if (typeof item.icon === 'string') {
-              NavIcon = WorkbenchOutlined;
-            }
+            const IconComp = typeof item.icon === 'string' ? WorkbenchOutlined : item.icon;
             const isActive = router.pathname.split('/')[1] === item.key;
             const NavItem = (): React.ReactElement => (
               <Link href={item.routeAddress}>
@@ -388,7 +389,7 @@ export const Navigation: FC<React.PropsWithChildren<unknown>> = () => {
                     [styles.templateActiveItem]: router.pathname.includes('template') && item.routeAddress.includes('template'),
                   })}
                 >
-                  <NavIcon className={styles.navIcon} />
+                  <IconComp className={styles.navIcon} />
                 </a>
                 {/* {item.icon} */}
               </Link>

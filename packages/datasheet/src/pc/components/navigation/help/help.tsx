@@ -21,28 +21,12 @@ import RcTrigger from 'rc-trigger';
 import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, useThemeColors } from '@apitable/components';
-import { isPrivateDeployment, NAV_ID, StoreActions, Strings, t } from '@apitable/core';
-import {
-  AdviseOutlined,
-  CodeFilled,
-  CommentOutlined,
-  DownloadOutlined,
-  KeyboardOutlined,
-  QuestionCircleOutlined,
-  RoadmapOutlined,
-  TimeOutlined,
-  WebOutlined,
-  UserGroupOutlined,
-} from '@apitable/icons';
+import { NAV_ID, StoreActions, Strings, t } from '@apitable/core';
+import { KeyboardOutlined, QuestionCircleOutlined } from '@apitable/icons';
 // eslint-disable-next-line no-restricted-imports
 import { ContextmenuItem, MobileContextMenu, Tooltip } from 'pc/components/common';
 import { ComponentDisplay, ScreenSize } from 'pc/components/common/component_display';
-import { navigationToUrl } from 'pc/components/route_manager/navigation_to_url';
 import { useResponsive } from 'pc/hooks';
-import { useContactUs } from 'pc/hooks/use_contact_us';
-import { getEnvVariables } from 'pc/utils/env';
-// @ts-ignore
-import { inSocialApp } from 'enterprise/home/social_platform/utils';
 import styles from './style.module.less';
 
 export interface IHelpProps {
@@ -57,76 +41,17 @@ export const Help: FC<React.PropsWithChildren<IHelpProps>> = ({ className, templ
   const { screenIsAtMost } = useResponsive();
   const isMobile = screenIsAtMost(ScreenSize.md);
 
-  const contactUs = useContactUs();
   const openShortcutKeyPanel = () => {
     dispatch(StoreActions.setShortcutKeyPanelVisible(true));
   };
 
   const menuData = [
     {
-      icon: <WebOutlined />,
-      text: t(Strings.official_website_without_abbr),
-      onClick: () => navigationToUrl(getEnvVariables().HELP_MENU_OFFICIAL_WEBSITE_URL),
-      hidden: !getEnvVariables().HELP_MENU_OFFICIAL_WEBSITE_URL,
-    },
-    {
-      icon: <QuestionCircleOutlined />,
-      text: t(Strings.help_center),
-      onClick: () => navigationToUrl(t(Strings.help_help_center_url)),
-    },
-    {
-      icon: <CodeFilled />,
-      text: t(Strings.api_sdk),
-      onClick: () => navigationToUrl(getEnvVariables().HELP_MENU_DEVELOPERS_CENTER_URL),
-      hidden: !getEnvVariables().HELP_MENU_DEVELOPERS_CENTER_URL,
-    },
-    {
-      icon: <DownloadOutlined />,
-      text: t(Strings.download_client),
-      onClick: () => navigationToUrl(`${window.location.origin}/download/`),
-      hidden: isMobile || inSocialApp?.() || isPrivateDeployment() || getEnvVariables().IS_SELFHOST || getEnvVariables().IS_APITABLE,
-    },
-    {
-      icon: <RoadmapOutlined color={colors.thirdLevelText} size={16} />,
-      text: t(Strings.product_roadmap),
-      onClick: () => navigationToUrl(getEnvVariables().HELP_MENU_PRODUCT_ROADMAP_URL),
-      hidden: isMobile || !getEnvVariables().HELP_MENU_PRODUCT_ROADMAP_URL,
-    },
-    {
-      icon: <TimeOutlined color={colors.thirdLevelText} size={16} />,
-      text: t(Strings.subscribe_demonstrate),
-      onClick: () => navigationToUrl(getEnvVariables().HELP_MENU_SUBSCRIBE_DEMONSTRATE_FORM_URL),
-      hidden: isMobile || !getEnvVariables().HELP_MENU_SUBSCRIBE_DEMONSTRATE_FORM_URL,
-    },
-    {
-      icon: <CommentOutlined />,
-      text: t(Strings.player_contact_us),
-      onClick: () => {
-        contactUs();
-      },
-      hidden: isMobile || isPrivateDeployment(),
-    },
-    {
-      icon: <AdviseOutlined />,
-      text: t(Strings.vomit_a_slot),
-      onClick: () => {
-        navigationToUrl(getEnvVariables().USER_FEEDBACK_FORM_URL);
-      },
-      hidden: isPrivateDeployment(),
-    },
-    {
       icon: <KeyboardOutlined />,
       text: t(Strings.keybinding_show_keyboard_shortcuts_panel),
       id: NAV_ID.HELP_MENU_SHORTCUT_PANEL,
       onClick: openShortcutKeyPanel,
       hidden: isMobile,
-    },
-    {
-      icon: <UserGroupOutlined color={colors.thirdLevelText} />,
-      text: t(Strings.help_partner_program),
-      id: NAV_ID.USER_PARTNER_PROGRAM,
-      onClick: () => navigationToUrl(`${window.location.origin}/partners/`),
-      hidden: !(getEnvVariables().IS_APITABLE && getEnvVariables().IS_ENTERPRISE) || getEnvVariables().IS_SELFHOST,
     },
   ];
 
