@@ -1,25 +1,41 @@
 version: '3'
 
 services:
+# 基础数据环境
   minio:
+    container_name: apitb_minio
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "19000:9000"
+      - "19001:9001"
 
   redis:
+    container_name: apitb_redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
   mysql:
+    container_name: apitb_mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
 
   rabbitmq:
+    container_name: apitb_rabbitmq
     ports:
       - "5671:5671"
       - "5672:5672"
       - "15672:15672"
-
+# 业务应用服务
+  gateway:
+    container_name: apitb_gateway
+  web-server:
+    container_name: apitb_webserver
+  backend-server:
+    container_name: apitb_backendserver
+  room-server:
+    container_name: apitb_roomserver
+  imageproxy-server:
+    container_name: apitb_imgproxy
+# 数据总线服务
   databus-server:
     ports:
       - "8625:8625"
