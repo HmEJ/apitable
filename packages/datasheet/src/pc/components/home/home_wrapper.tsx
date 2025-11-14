@@ -16,24 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Box, ThemeName, Typography, useTheme, useThemeColors } from '@apitable/components';
+import { ThemeName, Typography, useTheme, useThemeColors } from '@apitable/components';
 import { integrateCdnHost } from '@apitable/core';
-import { EmailfeedbackOutlined, LinkedinOutlined, TwitterOutlined } from '@apitable/icons';
 import { getEnvVariables } from 'pc/utils/env';
-import { GithubButton } from './components/github_button';
-import { NavBar } from './components/nav_bar';
 import { ActionType } from './pc_home';
 import styles from './style.module.less';
 
 interface IHomeWrapper {
-  action?: ActionType
+  action?: ActionType;
 }
 
-export const HomeWrapper: React.FC<React.PropsWithChildren<IHomeWrapper>> = ({ children, action }) => {
+export const HomeWrapper: React.FC<React.PropsWithChildren<IHomeWrapper>> = ({ children, action: _action }) => {
   const colors = useThemeColors();
   let logo = getEnvVariables().IS_AITABLE ? getEnvVariables().LOGO : getEnvVariables().LOGIN_LOGO!;
   let text = getEnvVariables().LOGO_TEXT_DARK;
-  if (useTheme().palette.type === ThemeName.Light ) {
+  if (useTheme().palette.type === ThemeName.Light) {
     if (!getEnvVariables().IS_AITABLE) {
       logo = getEnvVariables().LOGIN_LOGO_LIGHT!;
     }
@@ -55,14 +52,11 @@ export const HomeWrapper: React.FC<React.PropsWithChildren<IHomeWrapper>> = ({ c
           <Typography variant={'h7'} color={colors.textCommonSecondary}>
             {getEnvVariables().IS_AITABLE
               ? 'Custom ChatGPT with Table in 1-Click'
-              : getEnvVariables().LOGIN_MOTTO || "让世界爱上中国造!"}
+              : getEnvVariables().LOGIN_MOTTO || '技术二部专业二室'}
           </Typography>
         </div>
       </div>
       <div className={styles.main}>{children}</div>
-      <div className={styles.footer}>
-        <NavBar action={action} />
-      </div>
     </div>
   );
 };

@@ -27,7 +27,6 @@ import { ActiveAppSumo } from './components/active_app_sumo';
 import { ForgetPassword } from './components/forget_password';
 import { GithubButton } from './components/github_button';
 import { Login } from './components/login';
-import { NavBar } from './components/nav_bar';
 import { SignUp } from './components/sign_up';
 import { ActionType } from './pc_home';
 import styles from './style.module.less';
@@ -35,7 +34,7 @@ import styles from './style.module.less';
 export const MobileHome: React.FC<React.PropsWithChildren<unknown>> = () => {
   const inviteLinkInfo = useAppSelector((state: IReduxState) => state.invite.inviteLinkInfo);
   const inviteEmailInfo = useAppSelector((state: IReduxState) => state.invite.inviteEmailInfo);
-  const [action, setAction] = useState<ActionType>(ActionType.SignUp);
+  const [action, setAction] = useState<ActionType>(ActionType.SignIn);
   const [email, setEmail] = useState<string>('');
   const router = useRouter();
 
@@ -58,15 +57,12 @@ export const MobileHome: React.FC<React.PropsWithChildren<unknown>> = () => {
     switch (action) {
       case ActionType.SignIn:
         return <Login switchClick={switchActionType} email={email} setEmail={setEmail} />;
-        break;
       case ActionType.BindAppSumo:
         return <ActiveAppSumo />;
       case ActionType.SignUp:
         return <SignUp switchClick={switchActionType} />;
-        break;
       case ActionType.ForgetPassword:
         return <ForgetPassword switchClick={switchActionType} email={email} setEmail={setEmail} />;
-        break;
     }
   };
 
@@ -74,13 +70,10 @@ export const MobileHome: React.FC<React.PropsWithChildren<unknown>> = () => {
     switch (action) {
       case ActionType.SignIn:
         return 'Sign In';
-        break;
       case ActionType.SignUp:
         return 'Sign Up';
-        break;
       case ActionType.ForgetPassword:
         return 'Reset Password';
-        break;
       case ActionType.BindAppSumo:
         return 'Welcome Sumo-ling!';
     }
@@ -109,7 +102,6 @@ export const MobileHome: React.FC<React.PropsWithChildren<unknown>> = () => {
       <div className={styles.content}>{homeModal(action)}</div>
       <Space size={41} vertical>
         <GithubButton />
-        <NavBar action={action} />
       </Space>
     </div>
   );
